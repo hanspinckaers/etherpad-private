@@ -1754,12 +1754,42 @@ nicEditors.registerPlugin(nicPlugin,nicCodeOptions);
 
 // ------------------------------------------------------------
 
+var changesetTracker = 
+
 etherNicEditor = nicEditor.extend({
 	importText : function(newCode, undoable)
   	{
   		console.log("importText");
     	//info.ace_importText(newCode, undoable);
   	},
+
+  	changesetTracker : makeChangesetTracker(scheduler, rep.apool, {
+		withCallbacks: function(operationName, f)
+		{
+			console.log(operationName);
+			console.log(f);
+		  // inCallStackIfNecessary(operationName, function()
+		  // {
+		  //   fastIncorp(1);
+		  //   f(
+		  //   {
+		  //     setDocumentAttributedText: function(atext)
+		  //     {
+		  //       setDocAText(atext);
+		  //     },
+		  //     applyChangesetToDocument: function(changeset, preferInsertionAfterCaret)
+		  //     {
+		  //       var oldEventType = currentCallStack.editEvent.eventType;
+		  //       currentCallStack.startNewEvent("nonundoable");
+
+		  //       performDocumentApplyChangeset(changeset, preferInsertionAfterCaret);
+
+		  //       currentCallStack.startNewEvent(oldEventType);
+		  //     }
+		  //   });
+		  // });
+		}
+	},
 
 	importAText : function(newCode, apoolJsonObj, undoable)
  	{
