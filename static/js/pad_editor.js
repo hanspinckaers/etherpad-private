@@ -38,6 +38,8 @@ var padeditor = (function()
       // myNicEditor.setPanel('myNicPanel');
 
       self.ace = new etherNicEditor();
+      self.ace.setup();
+      
       //self.ace.init("editorcontainer", "", aceReady);
       self.ace.setPanel('editbar');
       self.ace.addInstance("editorcontainer")
