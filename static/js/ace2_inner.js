@@ -415,11 +415,13 @@ function OUTER(gscope)
           if (cs.repChanged) parenModule.notifyChange();
           else parenModule.notifyTick();
         }
+        
         recolorModule.recolorLines();
+        updateLineNumbers();
+
         if (cs.selectionAffected && !(browser.safari && (type == "applyChangesToBase" || type == "idleWorkTimer")))
         {
           updateBrowserSelectionFromRep();
-          updateLineNumbers();
         }
         if ((cs.docTextChanged || cs.userChangedSelection) && cs.type != "applyChangesToBase")
         {
@@ -1687,39 +1689,38 @@ function OUTER(gscope)
       root.innerHTML = "<div><!-- --></div>";
     }
 
-    p.mark("obs");
-    observeChangesAroundSelection();
-    observeSuspiciousNodes();
-    p.mark("dirty");
+    // observeChangesAroundSelection();
+    // observeSuspiciousNodes();
+
     var dirtyRanges = getDirtyRanges();
     //console.log("dirtyRanges: "+toSource(dirtyRanges));
     var dirtyRangesCheckOut = true;
     var j = 0;
     var a, b;
-    while (j < dirtyRanges.length)
-    {
-      a = dirtyRanges[j][0];
-      b = dirtyRanges[j][1];
-      if (!((a == 0 || getCleanNodeByKey(rep.lines.atIndex(a - 1).key)) && (b == rep.lines.length() || getCleanNodeByKey(rep.lines.atIndex(b).key))))
-      {
-        dirtyRangesCheckOut = false;
-        break;
-      }
-      j++;
-    }
-    if (!dirtyRangesCheckOut)
-    {
-      var numBodyNodes = root.childNodes.length;
-      for (var k = 0; k < numBodyNodes; k++)
-      {
-        var bodyNode = root.childNodes.item(k);
-        if ((bodyNode.tagName) && ((!bodyNode.id) || (!rep.lines.containsKey(bodyNode.id))))
-        {
-          observeChangesAroundNode(bodyNode);
-        }
-      }
-      dirtyRanges = getDirtyRanges();
-    }
+    // while (j < dirtyRanges.length)
+    // {
+    //   a = dirtyRanges[j][0];
+    //   b = dirtyRanges[j][1];
+    //   if (!((a == 0 || getCleanNodeByKey(rep.lines.atIndex(a - 1).key)) && (b == rep.lines.length() || getCleanNodeByKey(rep.lines.atIndex(b).key))))
+    //   {
+    //     dirtyRangesCheckOut = false;
+    //     break;
+    //   }
+    //   j++;
+    // }
+    // if (!dirtyRangesCheckOut)
+    // {
+    //   var numBodyNodes = root.childNodes.length;
+    //   for (var k = 0; k < numBodyNodes; k++)
+    //   {
+    //     var bodyNode = root.childNodes.item(k);
+    //     if ((bodyNode.tagName) && ((!bodyNode.id) || (!rep.lines.containsKey(bodyNode.id))))
+    //     {
+    //       observeChangesAroundNode(bodyNode);
+    //     }
+    //   }
+    //   dirtyRanges = getDirtyRanges();
+    // }
 
     clearObservedChanges();
 
@@ -1736,100 +1737,100 @@ function OUTER(gscope)
     p.mark("ranges");
     p.literal(dirtyRanges.length, "numdirt");
     var domInsertsNeeded = []; // each entry is [nodeToInsertAfter, [info1, info2, ...]]
-    while (i < dirtyRanges.length)
-    {
-      var range = dirtyRanges[i];
-      a = range[0];
-      b = range[1];
-      var firstDirtyNode = (((a == 0) && root.firstChild) || getCleanNodeByKey(rep.lines.atIndex(a - 1).key).nextSibling);
-      firstDirtyNode = (firstDirtyNode && isNodeDirty(firstDirtyNode) && firstDirtyNode);
-      var lastDirtyNode = (((b == rep.lines.length()) && root.lastChild) || getCleanNodeByKey(rep.lines.atIndex(b).key).previousSibling);
-      lastDirtyNode = (lastDirtyNode && isNodeDirty(lastDirtyNode) && lastDirtyNode);
-      if (firstDirtyNode && lastDirtyNode)
-      {
-        var cc = makeContentCollector(isStyled, browser, rep.apool, null, className2Author);
-        cc.notifySelection(selection);
-        var dirtyNodes = [];
-        for (var n = firstDirtyNode; n && !(n.previousSibling && n.previousSibling == lastDirtyNode);
-        n = n.nextSibling)
-        {
-          if (browser.msie)
-          {
-            // try to undo IE's pesky and overzealous linkification
-            window.console.log("try here!");
+    // while (i < dirtyRanges.length)
+    // {
+    //   var range = dirtyRanges[i];
+    //   a = range[0];
+    //   b = range[1];
+    //   var firstDirtyNode = (((a == 0) && root.firstChild) || getCleanNodeByKey(rep.lines.atIndex(a - 1).key).nextSibling);
+    //   firstDirtyNode = (firstDirtyNode && isNodeDirty(firstDirtyNode) && firstDirtyNode);
+    //   var lastDirtyNode = (((b == rep.lines.length()) && root.lastChild) || getCleanNodeByKey(rep.lines.atIndex(b).key).previousSibling);
+    //   lastDirtyNode = (lastDirtyNode && isNodeDirty(lastDirtyNode) && lastDirtyNode);
+    //   if (firstDirtyNode && lastDirtyNode)
+    //   {
+    //     var cc = makeContentCollector(isStyled, browser, rep.apool, null, className2Author);
+    //     cc.notifySelection(selection);
+    //     var dirtyNodes = [];
+    //     for (var n = firstDirtyNode; n && !(n.previousSibling && n.previousSibling == lastDirtyNode);
+    //     n = n.nextSibling)
+    //     {
+    //       if (browser.msie)
+    //       {
+    //         // try to undo IE's pesky and overzealous linkification
+    //         window.console.log("try here!");
 
-            try
-            {
-              n.createTextRange().execCommand("unlink", false, null);
-            }
-            catch (e)
-            {}
-          }
-          cc.collectContent(n);
-          dirtyNodes.push(n);
-        }
-        cc.notifyNextNode(lastDirtyNode.nextSibling);
-        var lines = cc.getLines();
-        if ((lines.length <= 1 || lines[lines.length - 1] !== "") && lastDirtyNode.nextSibling)
-        {
-          // dirty region doesn't currently end a line, even taking the following node
-          // (or lack of node) into account, so include the following clean node.
-          // It could be SPAN or a DIV; basically this is any case where the contentCollector
-          // decides it isn't done.
-          // Note that this clean node might need to be there for the next dirty range.
-          //console.log("inclusive of "+lastDirtyNode.next().dom.tagName);
-          b++;
-          var cleanLine = lastDirtyNode.nextSibling;
-          cc.collectContent(cleanLine);
-          toDeleteAtEnd.push(cleanLine);
-          cc.notifyNextNode(cleanLine.nextSibling);
-        }
+    //         try
+    //         {
+    //           n.createTextRange().execCommand("unlink", false, null);
+    //         }
+    //         catch (e)
+    //         {}
+    //       }
+    //       cc.collectContent(n);
+    //       dirtyNodes.push(n);
+    //     }
+    //     cc.notifyNextNode(lastDirtyNode.nextSibling);
+    //     var lines = cc.getLines();
+    //     if ((lines.length <= 1 || lines[lines.length - 1] !== "") && lastDirtyNode.nextSibling)
+    //     {
+    //       // dirty region doesn't currently end a line, even taking the following node
+    //       // (or lack of node) into account, so include the following clean node.
+    //       // It could be SPAN or a DIV; basically this is any case where the contentCollector
+    //       // decides it isn't done.
+    //       // Note that this clean node might need to be there for the next dirty range.
+    //       //console.log("inclusive of "+lastDirtyNode.next().dom.tagName);
+    //       b++;
+    //       var cleanLine = lastDirtyNode.nextSibling;
+    //       cc.collectContent(cleanLine);
+    //       toDeleteAtEnd.push(cleanLine);
+    //       cc.notifyNextNode(cleanLine.nextSibling);
+    //     }
 
-        var ccData = cc.finish();
-        var ss = ccData.selStart;
-        var se = ccData.selEnd;
-        lines = ccData.lines;
-        var lineAttribs = ccData.lineAttribs;
-        var linesWrapped = ccData.linesWrapped;
+    //     var ccData = cc.finish();
+    //     var ss = ccData.selStart;
+    //     var se = ccData.selEnd;
+    //     lines = ccData.lines;
+    //     var lineAttribs = ccData.lineAttribs;
+    //     var linesWrapped = ccData.linesWrapped;
 
-        if (linesWrapped > 0)
-        {
-          doAlert("Editor warning: " + linesWrapped + " long line" + (linesWrapped == 1 ? " was" : "s were") + " hard-wrapped into " + ccData.numLinesAfter + " lines.");
-        }
+    //     if (linesWrapped > 0)
+    //     {
+    //       doAlert("Editor warning: " + linesWrapped + " long line" + (linesWrapped == 1 ? " was" : "s were") + " hard-wrapped into " + ccData.numLinesAfter + " lines.");
+    //     }
 
-        if (ss[0] >= 0) selStart = [ss[0] + a + netNumLinesChangeSoFar, ss[1]];
-        if (se[0] >= 0) selEnd = [se[0] + a + netNumLinesChangeSoFar, se[1]];
+    //     if (ss[0] >= 0) selStart = [ss[0] + a + netNumLinesChangeSoFar, ss[1]];
+    //     if (se[0] >= 0) selEnd = [se[0] + a + netNumLinesChangeSoFar, se[1]];
 
-        var entries = [];
-        var nodeToAddAfter = lastDirtyNode;
-        var lineNodeInfos = new Array(lines.length);
-        for (var k = 0; k < lines.length; k++)
-        {
-          var lineString = lines[k];
-          var newEntry = createDomLineEntry(lineString);
-          entries.push(newEntry);
-          lineNodeInfos[k] = newEntry.domInfo;
-        }
-        //var fragment = magicdom.wrapDom(document.createDocumentFragment());
-        domInsertsNeeded.push([nodeToAddAfter, lineNodeInfos]);
-        forEach(dirtyNodes, function(n)
-        {
-          toDeleteAtEnd.push(n);
-        });
-        var spliceHints = {};
-        if (selStart) spliceHints.selStart = selStart;
-        if (selEnd) spliceHints.selEnd = selEnd;
-        splicesToDo.push([a + netNumLinesChangeSoFar, b - a, entries, lineAttribs, spliceHints]);
-        netNumLinesChangeSoFar += (lines.length - (b - a));
-      }
-      else if (b > a)
-      {
-        splicesToDo.push([a + netNumLinesChangeSoFar, b - a, [],
-          []
-        ]);
-      }
-      i++;
-    }
+    //     var entries = [];
+    //     var nodeToAddAfter = lastDirtyNode;
+    //     var lineNodeInfos = new Array(lines.length);
+    //     for (var k = 0; k < lines.length; k++)
+    //     {
+    //       var lineString = lines[k];
+    //       var newEntry = createDomLineEntry(lineString);
+    //       entries.push(newEntry);
+    //       lineNodeInfos[k] = newEntry.domInfo;
+    //     }
+    //     //var fragment = magicdom.wrapDom(document.createDocumentFragment());
+    //     domInsertsNeeded.push([nodeToAddAfter, lineNodeInfos]);
+    //     forEach(dirtyNodes, function(n)
+    //     {
+    //       toDeleteAtEnd.push(n);
+    //     });
+    //     var spliceHints = {};
+    //     if (selStart) spliceHints.selStart = selStart;
+    //     if (selEnd) spliceHints.selEnd = selEnd;
+    //     splicesToDo.push([a + netNumLinesChangeSoFar, b - a, entries, lineAttribs, spliceHints]);
+    //     netNumLinesChangeSoFar += (lines.length - (b - a));
+    //   }
+    //   else if (b > a)
+    //   {
+    //     splicesToDo.push([a + netNumLinesChangeSoFar, b - a, [],
+    //       []
+    //     ]);
+    //   }
+    //   i++;
+    // }
 
     var domChanges = (splicesToDo.length > 0);
 
@@ -1914,7 +1915,7 @@ function OUTER(gscope)
     p.end("END");
 
     return domChanges;
-  }
+  } //end
 
   function htmlForRemovedChild(n)
   {

@@ -33,9 +33,18 @@ var padeditor = (function()
         }
       }
 
-      self.ace = new Ace2Editor();
-      self.ace.init("editorcontainer", "", aceReady);
+      // hier is ie!
+      // var myNicEditor = new nicEditor();
+      // myNicEditor.setPanel('myNicPanel');
+
+      self.ace = new etherNicEditor();
+      //self.ace.init("editorcontainer", "", aceReady);
+      self.ace.setPanel('editbar');
+      self.ace.addInstance("editorcontainer")
       self.ace.setProperty("wraps", true);
+
+      console.log(self.ace);
+
       if (pad.getIsDebugEnabled())
       {
         self.ace.setProperty("dmesg", pad.dmesg);
