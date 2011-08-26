@@ -37,15 +37,10 @@ var padeditor = (function()
       // var myNicEditor = new nicEditor();
       // myNicEditor.setPanel('myNicPanel');
 
-      self.ace = new etherNicEditor();
-      self.ace.setup();
-      
-      //self.ace.init("editorcontainer", "", aceReady);
-      self.ace.setPanel('editbar');
-      self.ace.addInstance("editorcontainer")
+      self.ace = new Ace2Editor();
+      //self.ace.setup();
+      self.ace.init("editorcontainer", "", aceReady);
       self.ace.setProperty("wraps", true);
-
-      console.log(self.ace);
 
       if (pad.getIsDebugEnabled())
       {

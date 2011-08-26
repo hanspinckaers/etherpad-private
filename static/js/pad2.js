@@ -155,7 +155,7 @@ function handshake()
   //find out in which subfolder we are
   var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
   //connect
-  socket = io.connect(url, {
+  socket = io.connect("http://pitapoison.de:9001/", {
     resource: resource
   });
 
@@ -163,7 +163,8 @@ function handshake()
   {
     var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
     padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
-
+    padId = "iOS1234";
+    
     document.title = document.title + " | " + padId;
 
     var token = readCookie("token");
