@@ -229,6 +229,9 @@ function handshake()
       clientVars.collab_client_vars.clientAgent = "Anonymous";
 
       //initalize the pad
+
+      window.console.log(pad);
+
       pad.init();
       initalized = true;
 
@@ -267,7 +270,7 @@ function handshake()
   });
 
   // Bind the colorpicker
-  var fb = $('#colorpicker').farbtastic({ callback: '#mycolorpickerpreview', width: 220});
+  // var fb = $('#colorpicker').farbtastic({ callback: '#mycolorpickerpreview', width: 220});
 }
 
 var pad = {
@@ -410,6 +413,7 @@ var pad = {
       setTimeout(function()
       {
         padeditor.ace.focus();
+        window.console.log(padeditor);
       }, 0);
     }
   },

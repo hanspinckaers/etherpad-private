@@ -38,7 +38,7 @@ var padeditor = (function()
       // myNicEditor.setPanel('myNicPanel');
 
       self.ace = new Ace2Editor();
-      //self.ace.setup();
+//      self.ace.setup();
       self.ace.init("editorcontainer", "", aceReady);
       self.ace.setProperty("wraps", true);
 

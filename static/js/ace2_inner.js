@@ -35,14 +35,17 @@ function OUTER(gscope) {
 
     var disposed = false;
 
-    var editorInfo = parent.editorInfo;
+    var editorInfo = Ace2Editor.registry[0];
 
-    var iframe = window.frameElement;
-    var outerWin = iframe.ace_outerWin;
-    iframe.ace_outerWin = null; // prevent IE 6 memory leak
-    var sideDiv = iframe.nextSibling;
-    var lineMetricsDiv = sideDiv.nextSibling;
-    var overlaysdiv = lineMetricsDiv.nextSibling;
+    var iframe = window;
+    
+    var outerWin = document.getElementById("outerdocbody");
+    // iframe.ace_outerWin = null; // prevent IE 6 memory leak
+
+    var sideDiv = document.getElementById("sidediv");
+    var lineMetricsDiv = document.getElementById("linemetricsdiv");
+    var overlaysdiv = document.getElementById("overlaysdiv");
+
     initLineNumbers();
 
     var outsideKeyDown = function (evt) {};
@@ -72,6 +75,8 @@ function OUTER(gscope) {
     }
 
     var root, doc; // set in setup()
+    // root = doc.getElementById("innerdocbody");
+
     var isEditable = true;
     var doesWrap = true;
     var hasLineNumbers = true;
@@ -92,8 +97,15 @@ function OUTER(gscope) {
         //console.error = function(str) { alert(str); };
     }
 
-    function noop(v) {
-        //if(window.console) window.console.log(v);
+    function log(v, e) {
+        // if(window.console) window.console.log(v);
+        // var p = document.createElement("p");
+        // p.innerHTML = v;
+        // if(e) p.innerHTML += " <b>"+e+"</b>";
+        // if(p && document.getElementById('log')) document.getElementById('log').appendChild(p);
+    }
+
+    function noop(v, e) {
     }
 
     var PROFILER = window.PROFILER;
@@ -101,8 +113,8 @@ function OUTER(gscope) {
         PROFILER = function () {
             return {
                 start: noop,
-                mark: noop,
-                literal: noop,
+                mark: log,
+                literal: log,
                 end: noop,
                 cancel: noop
             };
@@ -226,8 +238,8 @@ function OUTER(gscope) {
                 extraTodding = lineHeight - backgroundHeight - extraBodding;
             }
             var spanStyle = dynamicCSS.selectorStyle("#innerdocbody span");
-            spanStyle.paddingTop = extraTodding + "px";
-            spanStyle.paddingBottom = extraBodding + "px";
+            // spanStyle.paddingTop = extraTodding + "px";
+            // spanStyle.paddingBottom = extraBodding + "px";
         }
     }
 
@@ -343,8 +355,20 @@ function OUTER(gscope) {
         var cs = currentCallStack;
 
         // window.console.log("doing action: "+action);  
-        result = action();
-        cleanExit = true;
+        try
+        {
+            result = action();
+            cleanExit = true;
+        }
+        catch(e)
+        {
+            
+        }
+        finally
+        {
+            
+        }
+
 
         if (cleanExit) {
             submitOldEvent(cs.editEvent);
@@ -357,7 +381,7 @@ function OUTER(gscope) {
                 recolorModule.recolorLines();
                 updateLineNumbers();
 
-                if (cs.selectionAffected && !(browser.safari && (type == "applyChangesToBase" || type == "idleWorkTimer"))) {
+                if (cs.selectionAffected && !(browser.safari && (type == "idleWorkTimer"))) {
                     updateBrowserSelectionFromRep();
                 }
                 if ((cs.docTextChanged || cs.userChangedSelection) && cs.type != "applyChangesToBase") {
@@ -635,8 +659,6 @@ function OUTER(gscope) {
             inCallStackIfNecessary("setWraps", function () {
                 fastIncorp(7);
                 recreateDOM();
-
-                if(window.console) window.console.log("fixView");
                 fixView();
             });
         }, 0);
@@ -794,7 +816,6 @@ function OUTER(gscope) {
     }
 
     function editorChangedSize() {
-        if(window.console) window.console.log("fixView");
         fixView();
     }
 
@@ -908,10 +929,9 @@ function OUTER(gscope) {
         } else if (k == "showslinenumbers") {
             hasLineNumbers = !! value;
             setClassPresence(sideDiv, "sidedivhidden", !hasLineNumbers);
-            if(window.console) window.console.log("fixView");
             fixView();
         } else if (k == "grayedout") {
-            setClassPresence(outerWin.document.body, "grayedout", !! value);
+            setClassPresence(document.body, "grayedout", !! value);
         } else if (k == "dmesg") {
             dmesg = value;
             window.dmesg = value;
@@ -1250,7 +1270,7 @@ function OUTER(gscope) {
 
     function getCleanNodeByKey(key) {
         var p = PROFILER("getCleanNodeByKey", false);
-        p.extra = 0;
+        p.extra = "getCleanNodeByKey";
         var n = doc.getElementById(key);
         // copying and pasting can lead to duplicate ids
         while (n && isNodeDirty(n)) {
@@ -1393,7 +1413,7 @@ function OUTER(gscope) {
       observeSuspiciousNodes();
       p.mark("dirty");
       var dirtyRanges = getDirtyRanges();
-      //console.log("dirtyRanges: "+toSource(dirtyRanges));
+
       var dirtyRangesCheckOut = true;
       var j = 0;
       var a, b;
@@ -1608,7 +1628,7 @@ function OUTER(gscope) {
 
       p.mark("fixview");
 
-      if(window.console) window.console.log("fixView");
+      
       fixView();
 
       p.end("END");
@@ -1643,6 +1663,7 @@ function OUTER(gscope) {
     }
 
     function insertDomLines(nodeToAddAfter, infoStructs, isTimeUp) {
+
         isTimeUp = (isTimeUp ||
         function () {
             return false;
@@ -2781,6 +2802,8 @@ function OUTER(gscope) {
         }
 
         function detectChangesAroundLine(line, reqInARow) {
+            // TODO : is dit de dure functie?
+
             // make sure cleanRanges is correct about line number "line" and the surrounding
             // lines; only stops checking at end of document or after no changes need
             // making for several consecutive lines. note that iteration is over old lines,
@@ -3835,29 +3858,41 @@ function OUTER(gscope) {
 
     function fixView() {
         // calling this method repeatedly should be fast
-        if (getInnerWidth() == 0 || getInnerHeight() == 0) {
-            return;
-        }
+        // if (getInnerWidth() == 0 || getInnerHeight() == 0) {
+        //     return;
+        // }
 
         function setIfNecessary(obj, prop, value) {
             if (obj[prop] != value) {
                 obj[prop] = value;
             }
         }
-
+        
         var lineNumberWidth = sideDiv.firstChild.offsetWidth;
         var newSideDivWidth = lineNumberWidth + LINE_NUMBER_PADDING_LEFT;
         if (newSideDivWidth < MIN_LINEDIV_WIDTH) newSideDivWidth = MIN_LINEDIV_WIDTH;
         iframePadLeft = EDIT_BODY_PADDING_LEFT;
         if (hasLineNumbers) iframePadLeft += newSideDivWidth + LINE_NUMBER_PADDING_RIGHT;
-        setIfNecessary(iframe.style, "left", iframePadLeft + "px");
+        // setIfNecessary(iframe.style, "left", iframePadLeft + "px");
+
         setIfNecessary(sideDiv.style, "width", newSideDivWidth + "px");
 
-        if(window.console) window.console.log(newHeight);
+        return;
+
+        // let native do the work
+ 
+        var lineNumberWidth = sideDiv.firstChild.offsetWidth;
+        var newSideDivWidth = lineNumberWidth + LINE_NUMBER_PADDING_LEFT;
+        if (newSideDivWidth < MIN_LINEDIV_WIDTH) newSideDivWidth = MIN_LINEDIV_WIDTH;
+        iframePadLeft = EDIT_BODY_PADDING_LEFT;
+        if (hasLineNumbers) iframePadLeft += newSideDivWidth + LINE_NUMBER_PADDING_RIGHT;
+        // setIfNecessary(iframe.style, "left", iframePadLeft + "px");
+
+        setIfNecessary(sideDiv.style, "width", newSideDivWidth + "px");
+        setIfNecessary(document.getElementById("innerdocbody").style, "left", iframePadLeft + "px");
 
         for (var i = 0; i < 2; i++) {
             var newHeight = root.clientHeight;
-            if(window.console) window.console.log(newHeight);
 
             var newWidth = (browser.msie ? root.createTextRange().boundingWidth : root.clientWidth);
             
@@ -3870,9 +3905,9 @@ function OUTER(gscope) {
                 
                 // newHeight = viewHeight;
 
-                if (browser.msie) setIfNecessary(outerWin.document.documentElement.style, 'overflowY', 'auto');
+                if (browser.msie) setIfNecessary(document.documentElement.style, 'overflowY', 'auto');
             } else {
-                if (browser.msie) setIfNecessary(outerWin.document.documentElement.style, 'overflowY', 'scroll');
+                if (browser.msie) setIfNecessary(document.documentElement.style, 'overflowY', 'scroll');
             }
 
             if (doesWrap) {
@@ -3880,8 +3915,8 @@ function OUTER(gscope) {
             } else {
                 if (newWidth < viewWidth) newWidth = viewWidth;
             }
-            setIfNecessary(iframe.style, "height", newHeight + "px");
-            setIfNecessary(iframe.style, "width", newWidth + "px");
+            // setIfNecessary(iframe.style, "height", newHeight + "px");
+            // setIfNecessary(iframe.style, "width", newWidth + "px");
             setIfNecessary(sideDiv.style, "height", newHeight + "px");
         }
 
@@ -3920,7 +3955,7 @@ function OUTER(gscope) {
                 y: win.pageYOffset
             };
         }
-        var docel = odoc.documentElement;
+        var docel = document.documentElement;
         if (docel && typeof (docel.scrollTop) == "number") {
             return {
                 x: docel.scrollLeft,
@@ -4115,6 +4150,9 @@ function OUTER(gscope) {
         doc = document; // defined as a var in scope outside
         inCallStack("setup", function () {
             var body = doc.getElementById("innerdocbody");
+
+            window.console.log("test");
+
             root = body; // defined as a var in scope outside
             if (browser.mozilla) addClass(root, "mozilla");
             if (browser.safari) addClass(root, "safari");
@@ -4225,16 +4263,16 @@ function OUTER(gscope) {
         var win = outerWin;
         var odoc = win.document;
         if (win.innerHeight && win.scrollMaxY) return win.innerHeight + win.scrollMaxY;
-        else if (odoc.body.scrollHeight > odoc.body.offsetHeight) return odoc.body.scrollHeight;
-        else return odoc.body.offsetHeight;
+        else if (document.body.scrollHeight > document.body.offsetHeight) return document.body.scrollHeight;
+        else return document.body.offsetHeight;
     }
 
     function getPageWidth() {
         var win = outerWin;
         var odoc = win.document;
         if (win.innerWidth && win.scrollMaxX) return win.innerWidth + win.scrollMaxX;
-        else if (odoc.body.scrollWidth > odoc.body.offsetWidth) return odoc.body.scrollWidth;
-        else return odoc.body.offsetWidth;
+        else if (document.body.scrollWidth > document.body.offsetWidth) return document.body.scrollWidth;
+        else return document.body.offsetWidth;
     }
 
     function getInnerHeight() {
@@ -4242,18 +4280,17 @@ function OUTER(gscope) {
         var odoc = win.document;
         var h;
         if (browser.opera) h = win.innerHeight;
-        else h = odoc.documentElement.scrollHeight;
+        else h = document.documentElement.scrollHeight;
         if (h) return h;
 
         // deal with case where iframe is hidden, hope that
         // style.height of iframe container is set in px
-        return Number(editorInfo.frame.parentNode.style.height.replace(/[^0-9]/g, '') || 0);
+
+        return 0;
     }
 
     function getInnerWidth() {
-        var win = outerWin;
-        var odoc = win.document;
-        return odoc.documentElement.clientWidth;
+        return document.documentElement.clientWidth;
     }
 
     function scrollNodeVerticallyIntoView(node) {
@@ -4288,7 +4325,7 @@ function OUTER(gscope) {
     function scrollSelectionIntoView() {
         if (!rep.selStart) return;
 
-        // if(window.console) window.console.log("fixView");
+        // 
         // fixView();
 
         var focusLine = (rep.selFocusAtStart ? rep.selStart[0] : rep.selEnd[0]);
@@ -4300,7 +4337,7 @@ function OUTER(gscope) {
                 var selectionPointX = getSelectionPointX(focusPoint);
                 scrollXHorizontallyIntoView(selectionPointX);
 
-                if(window.console) window.console.log("fixView");
+                
                 fixView();
             }
         }
@@ -4449,7 +4486,7 @@ function OUTER(gscope) {
     function initLineNumbers() {
         lineNumbersShown = 1;
         sideDiv.innerHTML = '<table border="0" cellpadding="0" cellspacing="0" align="right">' + '<tr><td id="sidedivinner"><div>1</div></td></tr></table>';
-        sideDivInner = outerWin.document.getElementById("sidedivinner");
+        sideDivInner = document.getElementById("sidedivinner");
     }
 
     function updateLineNumbers() {
@@ -4461,8 +4498,8 @@ function OUTER(gscope) {
             while (lineNumbersShown < newNumLines) {
                 lineNumbersShown++;
                 var n = lineNumbersShown;
-                var div = odoc.createElement("DIV");
-                div.appendChild(odoc.createTextNode(String(n)));
+                var div = document.createElement("DIV");
+                div.appendChild(document.createTextNode(String(n)));
                 container.appendChild(div);
             }
             while (lineNumbersShown > newNumLines) {
@@ -4473,7 +4510,7 @@ function OUTER(gscope) {
 
         if (currentCallStack && currentCallStack.domClean) {
             var a = sideDivInner.firstChild;
-            var b = doc.body.firstChild;
+            var b = root.firstChild;
             while (a && b) {
                 var h = (b.clientHeight || b.offsetHeight);
                 if (b.nextSibling) {
@@ -4494,6 +4531,5 @@ function OUTER(gscope) {
         }
     }
 
+    setup();
 };
-
-OUTER(this);

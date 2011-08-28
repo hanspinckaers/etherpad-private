@@ -156,7 +156,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       return;
     }
 
-    var earliestCommit = lastCommitTime + 500;
+    var earliestCommit = lastCommitTime;
     if (t < earliestCommit)
     {
       setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), earliestCommit - t);
@@ -350,7 +350,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
   function handleMessageFromServer(evt)
   {
-    if (window.console) console.log(evt);
+    // if (window.console) console.log(evt);
 
     if (!socket) return;
     if (!evt.data) return;

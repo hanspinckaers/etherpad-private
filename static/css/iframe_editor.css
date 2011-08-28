@@ -3,7 +3,7 @@
    Also see inner.css, included only in the inner one.
 */
 html { cursor: text; } /* in Safari, produces text cursor for whole doc (inc. below body) */
-span { cursor: auto; }
+span { cursor: auto; padding: 1px 0px;}
 
 a { cursor: pointer !important; }
 
@@ -11,16 +11,16 @@ ul, ol, li {
   padding: 0;
   margin: 0;
 }
-ul { margin-left: 1.5em; }
-ul ul { margin-left: 0 !important; }
-ul.list-bullet1 { margin-left: 1.5em; }
-ul.list-bullet2 { margin-left: 3em; }
-ul.list-bullet3 { margin-left: 4.5em; }
-ul.list-bullet4 { margin-left: 6em; }
-ul.list-bullet5 { margin-left: 7.5em; }
-ul.list-bullet6 { margin-left: 9em; }
-ul.list-bullet7 { margin-left: 10.5em; }
-ul.list-bullet8 { margin-left: 12em; }
+#innerdocbody ul { margin-left: 1.5em; }
+#innerdocbody ul ul { margin-left: 0 !important; }
+#innerdocbody ul.list-bullet1 { margin-left: 1.5em; }
+#innerdocbody ul.list-bullet2 { margin-left: 3em; }
+#innerdocbody ul.list-bullet3 { margin-left: 4.5em; }
+#innerdocbody ul.list-bullet4 { margin-left: 6em; }
+#innerdocbody ul.list-bullet5 { margin-left: 7.5em; }
+#innerdocbody ul.list-bullet6 { margin-left: 9em; }
+#innerdocbody ul.list-bullet7 { margin-left: 10.5em; }
+#innerdocbody ul.list-bullet8 { margin-left: 12em; }
 
 ul { list-style-type: disc; }
 ul.list-bullet1 { list-style-type: disc; }
@@ -35,8 +35,7 @@ ul.list-bullet8 { list-style-type: circle; }
 
 body {
   margin: 0;
-  white-space: nowrap;
-}				 
+}        
 
 #outerdocbody {
   background-color: #fff;
@@ -47,6 +46,16 @@ body.grayedout { background-color: #eee !important }
   font-size: 12px; /* overridden by body.style */
   font-family: monospace; /* overridden by body.style */
   line-height: 16px; /* overridden by body.style */
+
+  position: absolute;
+
+  width: 100%;
+  left:30px;
+}
+
+#innerdocbody:focus
+{
+  outline: none;
 }
 
 body.doesWrap {
@@ -54,7 +63,7 @@ body.doesWrap {
 }
 
 #innerdocbody {
-  padding-top: 1px; /* important for some reason? */
+  padding-top: 8px; /* important for some reason? */
   padding-right: 10px;
   padding-bottom: 8px;
   padding-left: 1px /* prevents characters from looking chopped off in FF3 */;
@@ -70,7 +79,7 @@ body.doesWrap {
   padding-top: 8px; /* EDIT_BODY_PADDING_TOP */
   padding-right: 3px; /* LINE_NUMBER_PADDING_RIGHT - 1 */
   position: absolute;
-  width: 20px; /* MIN_LINEDIV_WIDTH */
+  width: 0px; /* MIN_LINEDIV_WIDTH */
   top: 0;
   left: 0;
   cursor: default;
@@ -82,9 +91,7 @@ body.doesWrap {
 }
 
 .sidedivdelayed { /* class set after sizes are set */
-  background-color: #eee;
   color: #888 !important;
-  border-right: 1px solid #999;
 }
 .sidedivhidden {
   display: none;

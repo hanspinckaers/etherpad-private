@@ -19,7 +19,7 @@
 // requires: undefined
 
 Ace2Editor.registry = {
-  nextId: 1
+  nextId: 0
 };
 
 function Ace2Editor()
@@ -224,8 +224,10 @@ function Ace2Editor()
     info = null; // prevent IE 6 closure memory leaks
   });
 
-  editor.init = function(containerId, initialCode, doneFunc)
-  {
+  editor.init = function(containerId, initialCode, doneFunc){
+    
+    // init editor
+    OUTER(this);
 
     editor.importText(initialCode);
 
@@ -236,69 +238,73 @@ function Ace2Editor()
       doneFunc();
     };
 
-    (function()
-    {
-      var doctype = "<!doctype html>";
+    Ace2Editor.registry[0].onEditorReady();
 
-      var iframeHTML = ["'" + doctype + "<html><head>'"];
+    // (function()
+    // {
+    //   var doctype = "<!doctype html>";
 
-      plugins.callHook("aceInitInnerdocbodyHead", {
-        iframeHTML: iframeHTML
-      });
+    //   var iframeHTML = ["'" + doctype + "<html><head>'"];
 
-      // these lines must conform to a specific format because they are passed by the build script:      
-      iframeHTML.push($$INCLUDE_CSS_Q("../static/css/iframe_editor.css"));
-      iframeHTML.push($$INCLUDE_CSS_Q("../static/css/pad.css"));
-      iframeHTML.push($$INCLUDE_CSS_Q("../static/custom/pad.css"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/ace2_common.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/skiplist.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/virtual_lines.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/easysync2.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/cssmanager.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/colorutils.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/undomodule.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/contentcollector.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/changesettracker.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/linestylefilter.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/domline.js"));
-      iframeHTML.push($$INCLUDE_JS_Q("../static/js/ace2_inner.js"));
+    //   plugins.callHook("aceInitInnerdocbodyHead", {
+    //     iframeHTML: iframeHTML
+    //   });
 
-      iframeHTML.push('\'\\n<style type="text/css" title="dynamicsyntax"></style>\\n\'');
-      iframeHTML.push('\'</head><body id="innerdocbody" class="syntax" spellcheck="false">&nbsp;</body></html>\'');
+    //   // these lines must conform to a specific format because they are passed by the build script:      
+    //   iframeHTML.push($$INCLUDE_CSS_Q("../static/css/iframe_editor.css"));
+    //   iframeHTML.push($$INCLUDE_CSS_Q("../static/css/pad.css"));
+    //   iframeHTML.push($$INCLUDE_CSS_Q("../static/custom/pad.css"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/ace2_common.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/skiplist.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/virtual_lines.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/easysync2.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/cssmanager.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/colorutils.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/undomodule.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/contentcollector.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/changesettracker.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/linestylefilter.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/domline.js"));
+    //   iframeHTML.push($$INCLUDE_JS_Q("../static/js/ace2_inner.js"));
 
-      var outerScript = 'editorId = "' + info.id + '"; editorInfo = parent.' + thisFunctionsName + '.registry[editorId]; ' + 'window.onload = function() ' + '{ window.onload = null; setTimeout' + '(function() ' + '{ var iframe = document.createElement("IFRAME"); ' + 'iframe.scrolling = "no"; var outerdocbody = document.getElementById("outerdocbody"); ' + 'iframe.frameBorder = 0; iframe.allowTransparency = true; ' + // for IE
-      'outerdocbody.insertBefore(iframe, outerdocbody.firstChild); ' + 'iframe.ace_outerWin = window; ' + 'readyFunc = function() { editorInfo.onEditorReady(); readyFunc = null; editorInfo = null; }; ' + 'var doc = iframe.contentWindow.document; doc.open(); var text = (' + iframeHTML.join('+') + ').replace(/\\\\x3c/g, \'<\');doc.write(text); doc.close(); ' + '}, 0); }';
+    //   iframeHTML.push('\'\\n<style type="text/css" title="dynamicsyntax"></style>\\n\'');
+    //   iframeHTML.push('\'</head><body id="innerdocbody" class="syntax" spellcheck="false">&nbsp;</body></html>\'');
 
-      var outerHTML = [doctype, '<html><head>', $$INCLUDE_CSS("../static/css/iframe_editor.css"), $$INCLUDE_CSS("../static/css/pad.css"), $$INCLUDE_CSS("../static/custom/pad.css"),
-      // bizarrely, in FF2, a file with no "external" dependencies won't finish loading properly
-      // (throbs busy while typing)
-      '<link rel="stylesheet" type="text/css" href="data:text/css,"/>', '\x3cscript>\n', outerScript, '\n\x3c/script>', '</head><body id="outerdocbody"><div id="sidediv"><!-- --></div><div id="linemetricsdiv">x</div><div id="overlaysdiv"><!-- --></div></body></html>'];
+    //   var outerScript = 'editorId = "' + info.id + '"; editorInfo = parent.' + thisFunctionsName + '.registry[editorId]; ' + 'window.onload = function() ' + '{ window.onload = null; setTimeout' + '(function() ' + '{ var iframe = document.createElement("IFRAME"); ' + 'iframe.scrolling = "no"; var outerdocbody = document.getElementById("outerdocbody"); ' + 'iframe.frameBorder = 0; iframe.allowTransparency = true; ' + // for IE
+    //   'outerdocbody.insertBefore(iframe, outerdocbody.firstChild); ' + 'iframe.ace_outerWin = window; ' + 'readyFunc = function() { editorInfo.onEditorReady(); readyFunc = null; editorInfo = null; }; ' + 'var doc = iframe.contentWindow.document; doc.open(); var text = (' + iframeHTML.join('+') + ').replace(/\\\\x3c/g, \'<\');doc.write(text); doc.close(); ' + '}, 0); }';
 
-      if (!Array.prototype.map) Array.prototype.map = function(fun)
-      { //needed for IE
-        if (typeof fun != "function") throw new TypeError();
-        var len = this.length;
-        var res = new Array(len);
-        var thisp = arguments[1];
-        for (var i = 0; i < len; i++)
-        {
-          if (i in this) res[i] = fun.call(thisp, this[i], i, this);
-        }
-        return res;
-      };
+    //   var outerHTML = [doctype, '<html><head>', $$INCLUDE_CSS("../static/css/iframe_editor.css"), $$INCLUDE_CSS("../static/css/pad.css"), $$INCLUDE_CSS("../static/custom/pad.css"),
+    //   // bizarrely, in FF2, a file with no "external" dependencies won't finish loading properly
+    //   // (throbs busy while typing)
+    //   '<link rel="stylesheet" type="text/css" href="data:text/css,"/>', '\x3cscript>\n', outerScript, '\n\x3c/script>', '</head><body id="outerdocbody"><div id="sidediv"><!-- --></div><div id="linemetricsdiv">x</div><div id="overlaysdiv"><!-- --></div></body></html>'];
 
-      var outerFrame = document.createElement("IFRAME");
-      outerFrame.frameBorder = 0; // for IE
-      info.frame = outerFrame;
-      document.getElementById(containerId).appendChild(outerFrame);
+    //   if (!Array.prototype.map) Array.prototype.map = function(fun)
+    //   { //needed for IE
+    //     if (typeof fun != "function") throw new TypeError();
+    //     var len = this.length;
+    //     var res = new Array(len);
+    //     var thisp = arguments[1];
+    //     for (var i = 0; i < len; i++)
+    //     {
+    //       if (i in this) res[i] = fun.call(thisp, this[i], i, this);
+    //     }
+    //     return res;
+    //   };
 
-      var editorDocument = outerFrame.contentWindow.document;
+    //   var outerFrame = document.createElement("IFRAME");
+    //   outerFrame.frameBorder = 0; // for IE
+    // info.frame = outerFrame;
+    //    iframe.ace_outerWin = window;
+    //   document.getElementById(containerId).appendChild(outerFrame);
 
-      editorDocument.open();
-      editorDocument.write(outerHTML.join(''));
-      editorDocument.close();
-    })();
-  };
+    //   var editorDocument = outerFrame.contentWindow.document;
+
+    //   editorDocument.open();
+    //   editorDocument.write(outerHTML.join(''));
+    //   editorDocument.close();
+    // })();
+
+   };
 
   return editor;
 }

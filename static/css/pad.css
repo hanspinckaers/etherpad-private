@@ -48,6 +48,8 @@ a img
   overflow: hidden;
   padding-top: 3px;
   width: 100%;
+  z-index:9999;
+  position:fixed;
 }
 
 #editbar ul li 
@@ -127,18 +129,14 @@ input[type="file"] {
   display: none;
 }
 
-#editorcontainer 
+/*#log
 {
-  position: absolute;
-  
-  width: 100%;
-  
-  top: 36px;
-  left: 0px;  
-  bottom: 0px;
-
-  z-index: 1;
-}
+  width:25%;
+  height: 100%;
+  position:absolute;
+  right:0px;
+  background-color: #eee;
+}*/
 
 #editorcontainer iframe {
   height: 100%;
@@ -153,10 +151,20 @@ input[type="file"] {
 #editorcontainerbox{
   position:absolute;
   bottom:0;
-  top:0;
-  width:100%;
+  top:34px;
+  left:0px;
+  right:50px;
 }
 
+#log
+{
+  position:absolute;
+  left:80%;
+  width:20%;
+  background-color:#ddd;
+  height:100%;
+  overflow:scroll;
+}
 
 #padpage {
  position: absolute;
@@ -824,7 +832,7 @@ ul#colorpickerswatches li:hover
 
 #chatbox
 {
-  position:absolute;
+  position:fixed;
   bottom:0px;
   right: 20px;
   width: 180px;
@@ -890,7 +898,7 @@ ul#colorpickerswatches li:hover
 #chaticon
 {
   z-index: 400;
-  position:absolute;
+  position:fixed;
   bottom:0px;
   right: 20px;
   padding: 5px;
@@ -1094,7 +1102,7 @@ position: relative;
 
 #chatthrob{
 display:none;
-position:absolute;
+position:fixed;
 bottom:40px;
 font-size:14px;
 width:150px;
