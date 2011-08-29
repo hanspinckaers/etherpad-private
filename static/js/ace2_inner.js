@@ -98,7 +98,7 @@ function OUTER(gscope) {
     }
 
     function log(v, e) {
-        // if(window.console) window.console.log(v);
+        // if(window.console) window.window.console.log(v);
         // var p = document.createElement("p");
         // p.innerHTML = v;
         // if(e) p.innerHTML += " <b>"+e+"</b>";
@@ -275,13 +275,13 @@ function OUTER(gscope) {
 
     function inCallStack(type, action) {
         if (disposed){
-        console.log("disposed!")  
+        window.console.log("disposed!")  
 
           return;
         } 
 
         if (currentCallStack) {
-            window.console.log("Can't enter callstack " + type + ", already in " + currentCallStack.type);
+            window.window.console.log("Can't enter callstack " + type + ", already in " + currentCallStack.type);
 
             return;
         }
@@ -358,7 +358,7 @@ function OUTER(gscope) {
 
         var cs = currentCallStack;
 
-        window.console.log("doing action: "+action);  
+        window.window.console.log("doing action: "+action);  
         try
         {
             result = action();
@@ -398,7 +398,7 @@ function OUTER(gscope) {
         } else {
             // non-clean exit
             if (currentCallStack.type == "idleWorkTimer") {
-                window.console.log("set idle work timer");
+                window.window.console.log("set idle work timer");
 
                 idleWorkTimer.atLeast(1000);
             }
@@ -558,7 +558,7 @@ function OUTER(gscope) {
                             }
                         }
                     }
-                    //console.log(bracketState.toSource());
+                    //window.console.log(bracketState.toSource());
                     if ((!foundParen) && (loc >= 0)) nextLoc();
                 }
                 if (!foundParen) return null;
@@ -789,7 +789,7 @@ function OUTER(gscope) {
 
         performSelectionChange([0, rep.lines.atIndex(0).lineMarker], [0, rep.lines.atIndex(0).lineMarker]);
 
-        window.console.log("set idle work timer");
+        window.window.console.log("set idle work timer");
         idleWorkTimer.atMost(100);
 
         if (rep.alltext != atext.text) {
@@ -1133,7 +1133,7 @@ function OUTER(gscope) {
         //     if (isTimeUp()) return;
         //     var visibleRange = getVisibleCharRange();
         //     var docRange = [0, rep.lines.totalWidth()];
-        //     //console.log("%o %o", docRange, visibleRange);
+        //     //window.console.log("%o %o", docRange, visibleRange);
         //     finishedImportantWork = true;
         //     finishedWork = true;
         //   }
@@ -1142,7 +1142,7 @@ function OUTER(gscope) {
         //     //console.timeEnd("idlework");
         //     if (finishedWork)
         //     {
-        //       // window.console.log("set idle work timer");        
+        //       // window.window.console.log("set idle work timer");        
         //       // COMMENTED OUT!
         //       // idleWorkTimer.atMost(1000);
         //     }
@@ -1151,12 +1151,12 @@ function OUTER(gscope) {
         //       // if we've finished highlighting the view area,
         //       // more highlighting could be counter-productive,
         //       // e.g. if the user just opened a triple-quote and will soon close it.
-        //       window.console.log("set idle work timer");
+        //       window.window.console.log("set idle work timer");
         //       idleWorkTimer.atMost(500);
         //     }
         //     else
         //     {
-        //       window.console.log("set idle work timer");
+        //       window.window.console.log("set idle work timer");
         //       var timeToWait = Math.round(isTimeUp.elapsed() / 2);
         //       if (timeToWait < 100) timeToWait = 100;
         //       idleWorkTimer.atMost(timeToWait);
@@ -1292,7 +1292,7 @@ function OUTER(gscope) {
         // (from how it looks in our representation) and record them in a way
         // that can be used to "normalize" the document (apply the changes to our
         // representation, and put the DOM in a canonical form).
-        //top.console.log("observeChangesAroundNode(%o)", node);
+        //top.window.console.log("observeChangesAroundNode(%o)", node);
         var cleanNode;
         var hasAdjacentDirtyness;
         if (!isNodeDirty(node)) {
@@ -1388,11 +1388,11 @@ function OUTER(gscope) {
 
     function incorporateUserChanges(isTimeUp) {
     
-        window.console.log("incorporateUserChanges");
+        window.window.console.log("incorporateUserChanges");
 
       if (currentCallStack.domClean)
       {
-        // window.console.log("domClean return");
+        // window.window.console.log("domClean return");
         return false;
           
       } 
@@ -1403,14 +1403,14 @@ function OUTER(gscope) {
       isTimeUp = (isTimeUp ||
       function()
       {
-        window.console.log("isTimeUp return");
+        window.window.console.log("isTimeUp return");
         
         return false;
       });
 
       if (DEBUG && window.DONT_INCORP || window.DEBUG_DONT_INCORP)
       {
-        window.console.log("DEBUG");
+        window.window.console.log("DEBUG");
 
         return false;
       } 
@@ -1465,8 +1465,8 @@ function OUTER(gscope) {
       p.mark("getsel");
       var selection = getSelection();
 
-      //console.log(magicdom.root.dom.innerHTML);
-      //console.log("got selection: %o", selection);
+      //window.console.log(magicdom.root.dom.innerHTML);
+      //window.console.log("got selection: %o", selection);
       var selStart, selEnd; // each one, if truthy, has [line,char] needed to set selection
       var i = 0;
       var splicesToDo = [];
@@ -1514,7 +1514,7 @@ function OUTER(gscope) {
             // It could be SPAN or a DIV; basically this is any case where the contentCollector
             // decides it isn't done.
             // Note that this clean node might need to be there for the next dirty range.
-            //console.log("inclusive of "+lastDirtyNode.next().dom.tagName);
+            //window.console.log("inclusive of "+lastDirtyNode.next().dom.tagName);
             b++;
             var cleanLine = lastDirtyNode.nextSibling;
             cc.collectContent(cleanLine);
@@ -1596,7 +1596,7 @@ function OUTER(gscope) {
         n.parentNode.removeChild(n);
 
         //dmesg(htmlPrettyEscape(htmlForRemovedChild(n)));
-        //console.log("removed: "+id);
+        //window.console.log("removed: "+id);
       });
 
       p.mark("findsel");
@@ -1822,7 +1822,7 @@ function OUTER(gscope) {
     function getPointForLineAndChar(lineAndChar) {
         var line = lineAndChar[0];
         var charsLeft = lineAndChar[1];
-        //console.log("line: %d, key: %s, node: %o", line, rep.lines.atIndex(line).key,
+        //window.console.log("line: %d, key: %s, node: %o", line, rep.lines.atIndex(line).key,
         //getCleanNodeByKey(rep.lines.atIndex(line).key));
         var lineEntry = rep.lines.atIndex(line);
         charsLeft -= lineEntry.lineMarker;
@@ -2600,11 +2600,11 @@ function OUTER(gscope) {
             currentCallStack.repChanged = true;
 
             return true;
-            //console.log("selStart: %o, selEnd: %o, focusAtStart: %s", rep.selStart, rep.selEnd,
+            //window.console.log("selStart: %o, selEnd: %o, focusAtStart: %s", rep.selStart, rep.selEnd,
             //String(!!rep.selFocusAtStart));
         }
         return false;
-        //console.log("%o %o %s", rep.selStart, rep.selEnd, rep.selFocusAtStart);
+        //window.console.log("%o %o %s", rep.selStart, rep.selEnd, rep.selFocusAtStart);
     }
 
     function doCreateDomLine(nonEmpty) {
@@ -2785,7 +2785,7 @@ function OUTER(gscope) {
             // returns whether line was already correctly assigned (i.e. correctly
             // clean or dirty, according to cleanRanges, and if clean, correctly
             // attached or not attached (i.e. in the same range as) the prev and next lines).
-            //console.log("correctly assigning: %d", line);
+            //window.console.log("correctly assigning: %d", line);
             var rng = rangeForLine(line);
             var lineClean = isClean(line);
             if (rng < 0) {
@@ -2856,7 +2856,7 @@ function OUTER(gscope) {
             detectChangesAroundLine(N - 1, 1);
 
             p.mark("obs");
-            //console.log("observedChanges: "+toSource(observedChanges));
+            //window.console.log("observedChanges: "+toSource(observedChanges));
             for (var k in observedChanges.cleanNodesNearChanges) {
                 var key = k.substring(1);
                 if (rep.lines.containsKey(key)) {
@@ -2930,7 +2930,7 @@ function OUTER(gscope) {
 
     function getVisibleLineRange() {
         var viewport = getViewPortTopBottom();
-        //console.log("viewport top/bottom: %o", viewport);
+        //window.console.log("viewport top/bottom: %o", viewport);
         var obj = {};
         var start = rep.lines.search(function (e) {
             return getLineEntryTopBottom(e, obj).bottom > viewport.top;
@@ -2939,7 +2939,7 @@ function OUTER(gscope) {
             return getLineEntryTopBottom(e, obj).top >= viewport.bottom;
         });
         if (end < start) end = start; // unlikely
-        //console.log(start+","+end);
+        //window.console.log(start+","+end);
         return [start, end];
     }
 
@@ -2968,7 +2968,7 @@ function OUTER(gscope) {
                 n = n.parentNode;
             }
             if (n && isLink(n)) {
-                window.console.log("try here!");
+                window.window.console.log("try here!");
 
                 try {
                     var newWindow = window.open(n.href, '_blank');
@@ -3160,7 +3160,7 @@ function OUTER(gscope) {
     }
 
     function handleKeyEvent(evt) {
-        console.log("handleKeyEvent");
+        window.console.log("handleKeyEvent");
         if (!isEditable) return;
 
         var type = evt.type;
@@ -3290,12 +3290,12 @@ function OUTER(gscope) {
                 if ((!specialHandled) && parenModule.shouldNormalizeOnChar(charCode)) {
                     // idleWorkTimer.atMost(0);
                 } else {
-                    // window.console.log("set idle work timer");
+                    // window.window.console.log("set idle work timer");
                     // idleWorkTimer.atLeast(500);
                 }
             } else if (type == "keyup") {
                 var wait = 200;
-                // window.console.log("set idle work timer");
+                // window.window.console.log("set idle work timer");
                 idleWorkTimer.atLeast(wait);
                 idleWorkTimer.atMost(wait);
             }
@@ -3404,7 +3404,7 @@ function OUTER(gscope) {
     function hasIESelection() {
         var browserSelection;
 
-        window.console.log("try here!");
+        window.window.console.log("try here!");
 
         try {
             browserSelection = doc.selection;
@@ -3428,7 +3428,7 @@ function OUTER(gscope) {
         if (browser.msie) {
             var browserSelection;
 
-            window.console.log("try here!");
+            window.window.console.log("try here!");
 
             try {
                 browserSelection = doc.selection;
@@ -3590,7 +3590,7 @@ function OUTER(gscope) {
                 selection.startPoint = pointFromCollapsedRange(start);
                 selection.endPoint = pointFromCollapsedRange(end);
 /*if ((!selection.startPoint.node.isText) && (!selection.endPoint.node.isText)) {
-    console.log(selection.startPoint.node.uniqueId()+","+
+    window.console.log(selection.startPoint.node.uniqueId()+","+
           selection.startPoint.index+" / "+
           selection.endPoint.node.uniqueId()+","+
           selection.endPoint.index);
@@ -3850,9 +3850,9 @@ function OUTER(gscope) {
                         // of selection
                         browserSelection.collapse(end.container, end.offset);
                         //console.trace();
-                        //console.log(htmlPrettyEscape(rep.alltext));
-                        //console.log("%o %o", rep.selStart, rep.selEnd);
-                        //console.log("%o %d", start.container, start.offset);
+                        //window.console.log(htmlPrettyEscape(rep.alltext));
+                        //window.console.log("%o %o", rep.selStart, rep.selEnd);
+                        //window.console.log("%o %d", start.container, start.offset);
                         browserSelection.extend(start.container, start.offset);
                     } else {
                         var range = doc.createRange();
@@ -4015,7 +4015,7 @@ function OUTER(gscope) {
 
     function setDesignMode(newVal) {
 
-        // window.console.log("try here!");
+        // window.window.console.log("try here!");
         // try
         // {
 
@@ -4170,7 +4170,7 @@ function OUTER(gscope) {
         inCallStack("setup", function () {
             var body = doc.getElementById("innerdocbody");
 
-            window.console.log("test");
+            window.window.console.log("test");
 
             root = body; // defined as a var in scope outside
             if (browser.mozilla) addClass(root, "mozilla");
@@ -4178,7 +4178,7 @@ function OUTER(gscope) {
             if (browser.msie) addClass(root, "msie");
             if (browser.msie) {
                 // cache CSS background images
-                window.console.log("try here!");
+                window.window.console.log("try here!");
 
                 try {
                     doc.execCommand("BackgroundImageCache", false, true);
