@@ -1,0 +1,58 @@
+Ensure that all dependencies are up to date...
+
+Ensure jQuery is downloaded and up to date...
+Clear minfified cache...
+ensure custom css/js files are created...
+start...
+[32m[2011-08-29 16:01:34.850] [INFO] console - [39m[ 'jquery.min.js',
+  'pad_utils.js',
+  'plugins.js',
+  'undo-xpopup.js',
+  'json2.js',
+  'pad_cookie.js',
+  'pad_editor.js',
+  'pad_editbar.js',
+  'pad_docbar.js',
+  'pad_modals.js',
+  'collab_client.js',
+  'pad_userlist.js',
+  'pad_impexp.js',
+  'pad_savedrevs.js',
+  'pad_connectionstatus.js',
+  'pad2.js',
+  'jquery-ui.js',
+  'chat.js',
+  'easysync2.js',
+  'changesettracker.js',
+  'ace.js',
+  'ace2_inner.js',
+  'ace2_common.js',
+  'skiplist.js',
+  'virtual_lines.js',
+  'easysync2.js',
+  'cssmanager.js',
+  'colorutils.js',
+  'undomodule.js',
+  'contentcollector.js',
+  'changesettracker.js',
+  'linestylefilter.js',
+  'domline.js' ]
+[32m[2011-08-29 16:01:34.865] [INFO] console - [39mYour Etherpad Lite git version is 5aefa7e
+[32m[2011-08-29 16:01:34.865] [INFO] console - [39mReport bugs at https://github.com/Pita/etherpad-lite/issues
+[32m[2011-08-29 16:01:34.971] [INFO] console - [39mServer is listening at 0.0.0.0:9001
+[32m[2011-08-29 16:01:34.972] [INFO] console - [39m   [36minfo  -[39m'socket.io started'
+[32m[2011-08-29 17:34:03.143] [INFO] http - [39m200, GET /
+[32m[2011-08-29 17:34:03.155] [INFO] http - [39m200, GET /static/custom/index.css
+[32m[2011-08-29 17:34:03.156] [INFO] http - [39m200, GET /static/custom/index.js
+[32m[2011-08-29 17:34:40.452] [INFO] http - [39m200, GET /
+[32m[2011-08-29 17:34:41.074] [INFO] http - [39m200, GET /static/custom/index.css
+[32m[2011-08-29 17:34:41.076] [INFO] http - [39m200, GET /static/custom/index.js
+[32m[2011-08-29 17:35:01.310] [INFO] http - [39m200, GET /p/IGTKewchgM
+[32m[2011-08-29 17:35:01.383] [INFO] http - [39m200, GET /static/css/iframe_editor.css
+[32m[2011-08-29 17:35:01.383] [INFO] http - [39m200, GET /static/css/pad.css
+[32m[2011-08-29 17:35:01.400] [INFO] http - [39m200, GET /static/custom/pad.js
+[32m[2011-08-29 17:35:01.401] [INFO] http - [39m200, GET /static/custom/pad.css
+[32m[2011-08-29 17:35:07.451] [INFO] http - [39m200, GET /minified/pad.js
+[32m[2011-08-29 17:35:08.055] [INFO] http - [39m200, GET /static/img/leftarrow.png
+[32m[2011-08-29 17:35:08.055] [INFO] http - [39m200, GET /static/img/loading.gif
+[32m[2011-08-29 17:35:08.055] [INFO] http - [39m200, GET /static/img/etherpad_lite_icons.png
