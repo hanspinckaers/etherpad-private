@@ -200,8 +200,6 @@ function handshake()
 
   socket.on('message', function(obj)
   {
-    console.log("connect");
-
     //the access was not granted, give the user a message
     if(!receivedClientVars && obj.accessStatus)
     {

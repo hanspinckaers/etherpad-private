@@ -274,7 +274,11 @@ function OUTER(gscope) {
     var currentCallStack = null;
 
     function inCallStack(type, action) {
-        if (disposed) return;
+        if (disposed){
+        console.log("disposed!")  
+
+          return;
+        } 
 
         if (currentCallStack) {
             window.console.log("Can't enter callstack " + type + ", already in " + currentCallStack.type);
@@ -354,7 +358,7 @@ function OUTER(gscope) {
 
         var cs = currentCallStack;
 
-        // window.console.log("doing action: "+action);  
+        window.console.log("doing action: "+action);  
         try
         {
             result = action();
@@ -1383,11 +1387,13 @@ function OUTER(gscope) {
     }
 
     function incorporateUserChanges(isTimeUp) {
+    
+        window.console.log("incorporateUserChanges");
 
       if (currentCallStack.domClean)
       {
         // window.console.log("domClean return");
-        // return false;
+        return false;
           
       } 
 
@@ -3154,6 +3160,7 @@ function OUTER(gscope) {
     }
 
     function handleKeyEvent(evt) {
+        console.log("handleKeyEvent");
         if (!isEditable) return;
 
         var type = evt.type;
