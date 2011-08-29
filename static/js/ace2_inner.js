@@ -1386,8 +1386,8 @@ function OUTER(gscope) {
 
       if (currentCallStack.domClean)
       {
-        window.console.log("domClean return");
-        return false;
+        // window.console.log("domClean return");
+        // return false;
           
       } 
 
