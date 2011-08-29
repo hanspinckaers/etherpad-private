@@ -468,6 +468,8 @@ window.onerror = function test (msg, url, linenumber)
  var errObj = {errorInfo: JSON.stringify({msg: msg, url: url, linenumber: linenumber, userAgent: navigator.userAgent})};
  var loc = document.location;
  var url = loc.protocol + "//" + loc.hostname + ":" + loc.port + "/" + loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "jserror";
+
+ if(window.console) console.log({msg: msg, url: url, linenumber: linenumber, userAgent: navigator.userAgent});
  
  $.post(url, errObj);
  

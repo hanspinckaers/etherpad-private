@@ -155,12 +155,18 @@ function handshake()
   //find out in which subfolder we are
   var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
   //connect
+
   socket = io.connect("http://109.72.92.55/", {
-    resource: resource
+    resource: resource,
+    port : ""
   });
+  
+  console.log(socket);
 
   socket.once('connect', function()
   {
+    console.log("connect");
+    
     var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
     padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
     padId = "iOS1234";
@@ -194,6 +200,8 @@ function handshake()
 
   socket.on('message', function(obj)
   {
+    console.log("connect");
+
     //the access was not granted, give the user a message
     if(!receivedClientVars && obj.accessStatus)
     {

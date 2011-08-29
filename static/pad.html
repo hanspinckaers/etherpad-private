@@ -170,24 +170,11 @@
 <div id="editorcontainerbox">
 
   <div id="editorcontainer">
-
+    
     <script type="text/javascript">
-  //<![CDATA[
-    $(document).ready(function() {
-
-      editorId = "0";
-      editorInfo = Ace2Editor.registry[editorId];
-      
-      var outerdocbody = document.getElementById("outerdocbody");
-      window.ace_outerWin = window;
-      readyFunc = function () {
-          //editorInfo.onEditorReady();
-          readyFunc = null;
-          editorInfo = null;
-      };
-    });
-      //]]>
+      readyFunc = function() {};
     </script>
+
     <style type="text/css">
   /*<![CDATA[*/
     div.c4 {font-family: Arial,sans-serif; font-size: 13px;}

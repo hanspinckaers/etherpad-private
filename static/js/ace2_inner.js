@@ -1384,7 +1384,12 @@ function OUTER(gscope) {
 
     function incorporateUserChanges(isTimeUp) {
 
-      if (currentCallStack.domClean) return false;
+      if (currentCallStack.domClean)
+      {
+        window.console.log("domClean return");
+        return false;
+          
+      } 
 
       inInternationalComposition = false; // if we need the document normalized, so be it
       currentCallStack.isUserChange = true;
@@ -1392,10 +1397,17 @@ function OUTER(gscope) {
       isTimeUp = (isTimeUp ||
       function()
       {
+        window.console.log("isTimeUp return");
+        
         return false;
       });
 
-      if (DEBUG && window.DONT_INCORP || window.DEBUG_DONT_INCORP) return false;
+      if (DEBUG && window.DONT_INCORP || window.DEBUG_DONT_INCORP)
+      {
+        window.console.log("DEBUG");
+
+        return false;
+      } 
 
       var p = PROFILER("incorp", false);
 
