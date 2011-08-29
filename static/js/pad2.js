@@ -155,7 +155,7 @@ function handshake()
   //find out in which subfolder we are
   var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
   //connect
-  socket = io.connect("http://pitapoison.de:9001/", {
+  socket = io.connect("http://109.72.92.55/", {
     resource: resource
   });
 
