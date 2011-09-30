@@ -156,9 +156,9 @@ function handshake()
   var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
   //connect
 
-  socket = io.connect("http://109.72.92.55/", {
+  socket = io.connect("http://ec2-79-125-78-169.eu-west-1.compute.amazonaws.com/", {
     resource: resource,
-    port : ""
+    port: "80"
   });
   
   console.log(socket);
@@ -169,7 +169,7 @@ function handshake()
     
     var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
     padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
-    padId = "iOS1234";
+    padId = "iOS";
     
     document.title = document.title + " | " + padId;
 
@@ -225,7 +225,7 @@ function handshake()
     else if (!receivedClientVars)
     {
       //log the message
-      if (window.console) console.log(obj);
+      // if (window.console) console.log(obj);
 
       receivedClientVars = true;
 

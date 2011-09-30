@@ -79,7 +79,7 @@ var padeditor = (function()
       }
       var v;
 
-      v = getOption('showLineNumbers', true);
+      v = getOption('showLineNumbers', false);
       self.ace.setProperty("showslinenumbers", v);
       padutils.setCheckbox($("#options-linenoscheck"), v);
 
@@ -116,7 +116,7 @@ var padeditor = (function()
       self.viewZoom = percent;
       $("#viewzoommenu").val('z' + percent);
 
-      var baseSize = 13;
+      var baseSize = 18;
       self.ace.setProperty('textsize', Math.round(baseSize * self.viewZoom / 100));
 
       padcookie.setPref('viewZoom', percent);

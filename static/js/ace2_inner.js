@@ -275,8 +275,7 @@ function OUTER(gscope) {
 
     function inCallStack(type, action) {
         if (disposed){
-        window.console.log("disposed!")  
-
+          window.console.log("disposed!")  
           return;
         } 
 
@@ -358,7 +357,6 @@ function OUTER(gscope) {
 
         var cs = currentCallStack;
 
-        window.window.console.log("doing action: "+action);  
         try
         {
             result = action();
@@ -398,8 +396,6 @@ function OUTER(gscope) {
         } else {
             // non-clean exit
             if (currentCallStack.type == "idleWorkTimer") {
-                window.window.console.log("set idle work timer");
-
                 idleWorkTimer.atLeast(1000);
             }
         }
@@ -1388,8 +1384,6 @@ function OUTER(gscope) {
 
     function incorporateUserChanges(isTimeUp) {
     
-        window.window.console.log("incorporateUserChanges");
-
       if (currentCallStack.domClean)
       {
         // window.window.console.log("domClean return");
@@ -3160,7 +3154,6 @@ function OUTER(gscope) {
     }
 
     function handleKeyEvent(evt) {
-        window.console.log("handleKeyEvent");
         if (!isEditable) return;
 
         var type = evt.type;
@@ -4509,45 +4502,45 @@ function OUTER(gscope) {
     }
 
     function updateLineNumbers() {
-        var newNumLines = rep.lines.length();
-        if (newNumLines < 1) newNumLines = 1;
-        if (newNumLines != lineNumbersShown) {
-            var container = sideDivInner;
-            var odoc = outerWin.document;
-            while (lineNumbersShown < newNumLines) {
-                lineNumbersShown++;
-                var n = lineNumbersShown;
-                var div = document.createElement("DIV");
-                div.appendChild(document.createTextNode(String(n)));
-                container.appendChild(div);
-            }
-            while (lineNumbersShown > newNumLines) {
-                container.removeChild(container.lastChild);
-                lineNumbersShown--;
-            }
-        }
+        // var newNumLines = rep.lines.length();
+        // if (newNumLines < 1) newNumLines = 1;
+        // if (newNumLines != lineNumbersShown) {
+        //     var container = sideDivInner;
+        //     var odoc = outerWin.document;
+        //     while (lineNumbersShown < newNumLines) {
+        //         lineNumbersShown++;
+        //         var n = lineNumbersShown;
+        //         var div = document.createElement("DIV");
+        //         div.appendChild(document.createTextNode(String(n)));
+        //         container.appendChild(div);
+        //     }
+        //     while (lineNumbersShown > newNumLines) {
+        //         container.removeChild(container.lastChild);
+        //         lineNumbersShown--;
+        //     }
+        // }
 
-        if (currentCallStack && currentCallStack.domClean) {
-            var a = sideDivInner.firstChild;
-            var b = root.firstChild;
-            while (a && b) {
-                var h = (b.clientHeight || b.offsetHeight);
-                if (b.nextSibling) {
-                    // when text is zoomed in mozilla, divs have fractional
-                    // heights (though the properties are always integers)
-                    // and the line-numbers don't line up unless we pay
-                    // attention to where the divs are actually placed...
-                    // (also: padding on TTs/SPANs in IE...)
-                    h = b.nextSibling.offsetTop - b.offsetTop;
-                }
-                if (h) {
-                    var hpx = h + "px";
-                    if (a.style.height != hpx) a.style.height = hpx;
-                }
-                a = a.nextSibling;
-                b = b.nextSibling;
-            }
-        }
+        // if (currentCallStack && currentCallStack.domClean) {
+        //     var a = sideDivInner.firstChild;
+        //     var b = root.firstChild;
+        //     while (a && b) {
+        //         var h = (b.clientHeight || b.offsetHeight);
+        //         if (b.nextSibling) {
+        //             // when text is zoomed in mozilla, divs have fractional
+        //             // heights (though the properties are always integers)
+        //             // and the line-numbers don't line up unless we pay
+        //             // attention to where the divs are actually placed...
+        //             // (also: padding on TTs/SPANs in IE...)
+        //             h = b.nextSibling.offsetTop - b.offsetTop;
+        //         }
+        //         if (h) {
+        //             var hpx = h + "px";
+        //             if (a.style.height != hpx) a.style.height = hpx;
+        //         }
+        //         a = a.nextSibling;
+        //         b = b.nextSibling;
+        //     }
+        // }
     }
 
     setup();
