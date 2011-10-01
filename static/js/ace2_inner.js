@@ -106,6 +106,7 @@ function OUTER(gscope) {
     }
 
     function noop(v, e) {
+    
     }
 
     var PROFILER = window.PROFILER;

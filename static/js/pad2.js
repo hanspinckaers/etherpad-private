@@ -156,9 +156,9 @@ function handshake()
   var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
   //connect
 
-  socket = io.connect("http://ec2-79-125-78-169.eu-west-1.compute.amazonaws.com/", {
+  socket = io.connect("localhost", {
     resource: resource,
-    port: "80"
+    port: "9001"
   });
   
   console.log(socket);
@@ -235,8 +235,6 @@ function handshake()
       clientVars.collab_client_vars.clientAgent = "Anonymous";
 
       //initalize the pad
-
-      window.console.log(pad);
 
       pad.init();
       initalized = true;

@@ -108,7 +108,8 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       socket.onhiccup = function() {};*/
       socket.disconnect();
     }
-    socket = null;
+    console.log(reason);
+    // socket = null;
     setChannelState("DISCONNECTED", reason);
   }
 
@@ -142,7 +143,8 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       {
         // a commit is taking too long
         appLevelDisconnectReason = "slowcommit";
-        socket.disconnect();
+        console.log("appLevelDisconnectReason");
+        // socket.disconnect();
       }
       else if (state == "COMMITTING" && (t - lastCommitTime) > 5000)
       {
@@ -153,7 +155,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
         // run again in a few seconds, to detect a disconnect
         setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 3000);
       }
-      return;
+      // return;
     }
 
     var earliestCommit = lastCommitTime + 100;
@@ -232,7 +234,8 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
     socket.on('disconnect', function(obj)
     {
-      handleSocketClosed(true);
+	    console.log("disconnect");
+     	handleSocketClosed(true);
     });
 
 /*var success = false;
@@ -322,18 +325,18 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
   {
     return function()
     {
-      try
-      {
+      //try
+      //{
         return func.apply(this, Array.prototype.slice.call(arguments));
-      }
-      catch (e)
-      {
-        caughtErrors.push(e);
-        caughtErrorCatchers.push(catcher);
-        caughtErrorTimes.push(+new Date());
-        //console.dir({catcher: catcher, e: e});
-        throw e;
-      }
+//      }
+//      catch (e)
+//      {
+//        caughtErrors.push(e);
+//        caughtErrorCatchers.push(catcher);
+//        caughtErrorTimes.push(+new Date());
+//        console.dir({catcher: catcher, e: e});
+//        throw e;
+//      }
     };
   }
 
@@ -365,7 +368,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       var apool = msg.apool;
       if (newRev != (rev + 1))
       {
-        dmesg("bad message revision on NEW_CHANGES: " + newRev + " not " + (rev + 1));
+        console.log("bad message revision on NEW_CHANGES: " + newRev + " not " + (rev + 1));
         socket.disconnect();
         return;
       }
@@ -377,7 +380,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       var newRev = msg.newRev;
       if (newRev != (rev + 1))
       {
-        dmesg("bad message revision on ACCEPT_COMMIT: " + newRev + " not " + (rev + 1));
+        console.log("bad message revision on ACCEPT_COMMIT: " + newRev + " not " + (rev + 1));
         socket.disconnect();
         return;
       }
@@ -522,7 +525,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
   function handleSocketClosed(params)
   {
-    socket = null;
+    // socket = null;
 
     $.each(keys(userSet), function()
     {
@@ -537,7 +540,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
     });
 
     var reason = appLevelDisconnectReason || params.reason;
-    var shouldReconnect = params.reconnect;
+    var shouldReconnect = params.reconnect || true;
     if (shouldReconnect)
     {
 
@@ -554,11 +557,13 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
         setChannelState("RECONNECTING", reason);
         setUpSocket();
       }
-
+	
+	  console.log("reconnecting");
     }
     else
     {
       setChannelState("DISCONNECTED", reason);
+      console.log("of toch niet");
     }
   }
 
