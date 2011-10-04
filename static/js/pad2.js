@@ -132,9 +132,9 @@ function handshake() {
     //find out in which subfolder we are
     var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
     //connect
-    socket = io.connect("http://localhost:9001/", {
+    socket = io.connect("http://ec2-46-137-59-108.eu-west-1.compute.amazonaws.com/", {
         resource: resource,
-        port: "9001"
+        port: "80"
     });
 
     console.log(socket);
