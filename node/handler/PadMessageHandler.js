@@ -442,30 +442,31 @@ function handleUserChanges(client, message)
     function (callback)
     {
       var prevText = pad.text();
-      
+            
       if (Changeset.oldLen(changeset) != prevText.length) 
       {
         console.warn("Can't apply USER_CHANGES "+changeset+" with oldLen " + Changeset.oldLen(changeset) + " to document of length " + prevText.length);
-        client.json.send({disconnect:"badChangeset"});
-        callback();
-        return;
+        // client.json.send({disconnect:"badChangeset"});
+        // callback();
+        // return;
       }
-        
-      var thisAuthor = sessioninfos[client.id].author;
-        
-      pad.appendRevision(changeset, thisAuthor);
-        
-      var correctionChangeset = _correctMarkersInPad(pad.atext, pad.pool);
-      if (correctionChangeset) {
-        pad.appendRevision(correctionChangeset);
+      else {
+	      var thisAuthor = sessioninfos[client.id].author;
+	        
+	      pad.appendRevision(changeset, thisAuthor);
+	        
+	      var correctionChangeset = _correctMarkersInPad(pad.atext, pad.pool);
+	      if (correctionChangeset) {
+	        pad.appendRevision(correctionChangeset);
+	      }
+	        
+	      if (pad.text().lastIndexOf("\n\n") != pad.text().length-2) {
+	        var nlChangeset = Changeset.makeSplice(pad.text(), pad.text().length-1, 0, "\n");
+	        pad.appendRevision(nlChangeset);
+	      }
+	        
+	      exports.updatePadClients(pad, callback);
       }
-        
-      if (pad.text().lastIndexOf("\n\n") != pad.text().length-2) {
-        var nlChangeset = Changeset.makeSplice(pad.text(), pad.text().length-1, 0, "\n");
-        pad.appendRevision(nlChangeset);
-      }
-        
-      exports.updatePadClients(pad, callback);
     }
   ], function(err)
   {

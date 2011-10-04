@@ -1,3 +1,5 @@
+/* @override http://localhost:9001/static/css/pad.css */
+
 *,html,body,p{ margin: 0; padding: 0; }
 .clear { clear: both; }
 html { font-size: 62.5%; }
@@ -478,10 +480,10 @@ table#otheruserstable { display: none; }
 .modaldialog.cboxreconnecting .modaldialog-inner,
 .modaldialog.cboxconnecting .modaldialog-inner {
   background: url(static/img/connectingbar.gif) no-repeat center 60px;
-  height: 100px;
+  height: 4px;
 }
 .modaldialog.cboxreconnecting {
-  background: #fed;
+  background: #ccc;
 }
 .modaldialog.cboxconnecting,
 .modaldialog.cboxdisconnected {
@@ -535,8 +537,8 @@ table#otheruserstable { display: none; }
 .cboxdisconnected #connectionboxinner .disconnected { display: block; }
 
 #connectionboxinner .reconnecting {
-  margin-top: 20px;
-  font-size: 1.6em; color: #555;
+  margin-top: -5px;
+  font-size: 1.6em; color: black;
   text-align: center; display: none;
 }
 .cboxreconnecting #connectionboxinner .reconnecting { display: block; }
@@ -627,6 +629,23 @@ table#otheruserstable { display: none; }
   background: white;
  border: 1px solid #999;
 }
+
+.modaldialog.cboxreconnecting
+{
+	 position: absolute;
+	 top: 0px;
+	 width: 485px;
+	 display: none;
+	 z-index: 501;
+	 zoom: 1;
+	 overflow: hidden;
+	border: 1px solid #999;
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.34);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.34);
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.34);
+	opacity: 1;
+}
+
 .modaldialog .modaldialog-inner { padding: 10pt; }
 .modaldialog .modaldialog-hide {
   float: right;

@@ -121,15 +121,19 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
   function handleUserChanges()
   {
+  	console.log("handleUserChanges");
+  
     if ((!socket) || channelState == "CONNECTING")
     {
       if (channelState == "CONNECTING" && (((+new Date()) - initialStartConnectTime) > 20000))
       {
         abandonConnection("initsocketfail"); // give up
+        console.log("initsocketfail");
       }
       else
       {
         // check again in a bit
+        console.log("check again in a bit");
         setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 1000);
       }
       return;
@@ -139,23 +143,24 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
     if (state != "IDLE")
     {
-      if (state == "COMMITTING" && (t - lastCommitTime) > 20000)
-      {
+//      if (state == "COMMITTING" && (t - lastCommitTime) > 20000)
+//      {
         // a commit is taking too long
-        appLevelDisconnectReason = "slowcommit";
-        console.log("appLevelDisconnectReason");
-        // socket.disconnect();
-      }
-      else if (state == "COMMITTING" && (t - lastCommitTime) > 5000)
-      {
-        callbacks.onConnectionTrouble("SLOW");
-      }
-      else
-      {
+//        appLevelDisconnectReason = "slowcommit";
+//        console.log("appLevelDisconnectReason");        
+//      }
+//      else if (state == "COMMITTING" && (t - lastCommitTime) > 5000)
+//      {
+//        callbacks.onConnectionTrouble("SLOW");
+//        console.log("SLOW");
+//      }
+//      else
+//      {
         // run again in a few seconds, to detect a disconnect
         setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 3000);
-      }
-      // return;
+//      }
+      console.log(state);
+      return;
     }
 
     var earliestCommit = lastCommitTime + 100;
@@ -186,6 +191,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
     if (sentMessage)
     {
       // run again in a few seconds, to detect a disconnect
+      console.log("run again in a few seconds, to detect a disconnect");
       setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 3000);
     }
   }
@@ -203,6 +209,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 
   function setUpSocket()
   {
+      
     //oldSocketId = String(Math.floor(Math.random()*1e12));
     //socketId = String(Math.floor(Math.random()*1e12));
 /*socket = new io.Socket();
@@ -554,11 +561,56 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       }
       else
       {
+      	
+      	// bug 2 reconnects (you get connected 2 times, pad fails!
+      
         setChannelState("RECONNECTING", reason);
-        setUpSocket();
+       	console.log("reconnecting");
+       	
+       	var loc = document.location;
+       	//get the correct port
+       	var port = loc.port == "" ? (loc.protocol == "https:" ? 443 : 80) : loc.port;
+       	//create the url
+       	var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
+       	//find out in which subfolder we are
+       	var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
+	
+	    console.log(socket);
+	
+	    socket.once('connect', function () {
+	        console.log("connect");
+	
+	        var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
+	        padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
+	        padId = "iOS";
+	
+	        document.title = document.title + " | " + padId;
+	
+	        var token = readCookie("token");
+	        if (token == null) {
+	            token = randomString();
+	            createCookie("token", token, 60);
+	        }
+	
+	        var sessionID = readCookie("sessionID");
+	        var password = readCookie("password");
+	
+	        var msg = {
+	            "component": "pad",
+	            "type": "CLIENT_READY",
+	            "padId": padId,
+	            "sessionID": sessionID,
+	            "password": password,
+	            "token": token,
+	            "protocolVersion": 2
+	        };
+	        socket.json.send(msg);
+	        console.log(msg);
+	      	setChannelState("CONNECTED");
+		    state = "IDLE"
+	    });
       }
 	
-	  console.log("reconnecting");
     }
     else
     {

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+// Common functions for ace2
 
 function isNodeText(node)
 {

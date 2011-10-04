@@ -31,23 +31,58 @@ var gzip = require('gzip');
 var server = require('../server');
 var os = require('os');
 
-var padJS = ["jquery.min.js", "pad_utils.js", "plugins.js", "undo-xpopup.js", "json2.js", "pad_cookie.js", "pad_editor.js", "pad_editbar.js", "pad_docbar.js", "pad_modals.js", "collab_client.js", "pad_userlist.js", "pad_impexp.js", "pad_savedrevs.js", "pad_connectionstatus.js", "pad2.js", "jquery-ui.js", "chat.js", "easysync2.js","changesettracker.js", "ace.js"];
-padJS.push("ace2_inner.js");
-padJS.push("ace2_common.js");
-padJS.push("skiplist.js");
-padJS.push("virtual_lines.js");
-padJS.push("easysync2.js");
-padJS.push("cssmanager.js");
-padJS.push("colorutils.js");
-padJS.push("undomodule.js");
-padJS.push("contentcollector.js");
-padJS.push("changesettracker.js");
-padJS.push("linestylefilter.js");
-padJS.push("domline.js");
+var both = [
+"jquery.min.js",
+"plugins.js", 
+"undo-xpopup.js", 
+"json2.js", 
+"colorutils.js", 
+"pad_utils.js", 
+"pad_cookie.js", 
+"pad_editor.js", 
+"pad_editbar.js", 
+"pad_docbar.js", 
+"pad_modals.js", 
+]
+
+var padOnlyJS = [
+"collab_client.js", 
+"pad_userlist.js", 
+"pad_impexp.js", 
+"pad_savedrevs.js", 
+"pad_connectionstatus.js", 
+"pad2.js", 
+"jquery-ui.js", 
+"chat.js", 
+"easysync2.js",
+"changesettracker.js", 
+"ace.js",
+"ace2_inner.js",
+"ace2_common.js",
+"skiplist.js",
+"virtual_lines.js",
+"cssmanager.js",
+"undomodule.js",
+"contentcollector.js",
+"changesettracker.js",
+"linestylefilter.js",
+"domline.js"];
+
+var padJS = both.concat(padOnlyJS);
 
 console.log(padJS);
 
-var timesliderJS = ["jquery.min.js", "plugins.js", "undo-xpopup.js", "json2.js", "colorutils.js", "draggable.js", "pad_utils.js", "pad_cookie.js", "pad_editor.js", "pad_editbar.js", "pad_docbar.js", "pad_modals.js", "easysync2_client.js", "domline_client.js", "linestylefilter_client.js", "cssmanager_client.js", "broadcast.js", "broadcast_slider.js", "broadcast_revisions.js"];
+var timesliderOnlyJS = [
+"draggable.js", 
+"easysync2_client.js", 
+"domline_client.js", 
+"linestylefilter_client.js", 
+"cssmanager_client.js", 
+"broadcast.js", 
+"broadcast_slider.js", 
+"broadcast_revisions.js"];
+
+var timesliderJS = both.concat(timesliderOnlyJS);
 
 /**
  * creates the minifed javascript for the given minified name

@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
+ // Core of the editor
 
 function OUTER(gscope) {
 
@@ -40,8 +42,6 @@ function OUTER(gscope) {
     var iframe = window;
     
     var outerWin = document.getElementById("outerdocbody");
-    // iframe.ace_outerWin = null; // prevent IE 6 memory leak
-
     var sideDiv = document.getElementById("sidediv");
     var lineMetricsDiv = document.getElementById("linemetricsdiv");
     var overlaysdiv = document.getElementById("overlaysdiv");
