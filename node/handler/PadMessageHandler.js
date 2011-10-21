@@ -811,8 +811,13 @@ function handleClientReady(client, message)
       client.json.send(clientVars);
       
       //Save the revision and the author id in sessioninfos
-      sessioninfos[client.id].rev = pad.getHeadRevisionNumber();
+      sessioninfos[client.id].rev = (message.data) ? message.data.lastRev : pad.getHeadRevisionNumber();
       sessioninfos[client.id].author = author;
+      
+      if(message.data)
+      {
+	  	exports.updatePadClients(pad, function(){});
+      }
       
       //prepare the notification for the other users on the pad, that this user joined
       var messageToTheOtherUsers = {

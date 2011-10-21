@@ -388,7 +388,7 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       if (newRev != (rev + 1))
       {
         console.log("bad message revision on ACCEPT_COMMIT: " + newRev + " not " + (rev + 1));
-        socket.disconnect();
+        //socket.disconnect();
         return;
       }
       rev = newRev;
@@ -602,6 +602,11 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 	            "sessionID": sessionID,
 	            "password": password,
 	            "token": token,
+	            data: {
+	              lastRev:rev,
+	              userInfo:userSet[userId],
+	              stats: getStats() 
+	             }, 
 	            "protocolVersion": 2
 	        };
 	        socket.json.send(msg);
