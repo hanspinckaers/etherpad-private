@@ -474,7 +474,7 @@ function handleUserChanges(client, message)
   });
 }
 
-exports.updatePadClients = function(pad, callback)
+exports.updatePadClients = function(pad, callback, syncing)
 {       
   //skip this step if noone is on this pad
   if(!pad2sessions[pad.id])
@@ -523,7 +523,7 @@ exports.updatePadClients = function(pad, callback)
             return;
           }
             
-          if(author == sessioninfos[session].author)
+          if(author == sessioninfos[session].author && !syncing)
           {
             socketio.sockets.sockets[session].json.send({"type":"COLLABROOM","data":{type:"ACCEPT_COMMIT", newRev:r}});
           }
@@ -816,7 +816,7 @@ function handleClientReady(client, message)
       
       if(message.data)
       {
-	  	exports.updatePadClients(pad, function(){});
+	  	  exports.updatePadClients(pad, function(){}, true);
       }
       
       //prepare the notification for the other users on the pad, that this user joined

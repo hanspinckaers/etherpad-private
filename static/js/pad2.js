@@ -24,6 +24,7 @@ $(document).ready(function () {
     if (typeof costumStart == "function") costumStart();
     getParams();
 //    handshake();
+    fakeHandshake();
 });
 
 $(window).unload(function () {
@@ -123,6 +124,9 @@ function savePassword() {
     document.location = document.location;
 }
 
+var receivedClientVars = false;
+var initalized = false;
+
 function fakeHandshake()
 {
 	var loc = document.location;
@@ -132,17 +136,19 @@ function fakeHandshake()
 	var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
 	//find out in which subfolder we are
 	var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
-	//connect
-	socket = io.connect("http://192.168.1.129:9001/", {
+	
+    //connect
+	socket = io.connect(url, {
 	    resource: resource,
 	    port: "9001"
 	});
+
     //log the message
     // if (window.console) console.log(obj);
     receivedClientVars = true;
 
     //set some client vars
-    clientVars = {"accountPrivs":{"maxRevisions":100},"initialRevisionList":[],"initialOptions":{"guestPolicy":"deny"},"collab_client_vars":{"initialAttributedText":{"text":"\n\n\\l,knjlk\n\nk\nk\\k\n\ninteressant\nahallo Dakar:)\nsdf\nasdf\nsadf\nas\ndf\nasdf\n\n\n","attribs":"*0|1+1*1|5+h*0|1+1*1+b|1+1*1+1*0+d*1|8+r|1+1"},"clientIp":"127.0.0.1","padId":"iOS","historicalAuthorData":{"a.WrHoPrOcqgdOoMgJ":{"colorId":25,"name":null},"a.N69SC30KE1VsexUN":{"colorId":7,"name":null},"a.mhm7nYHRCZouqkiu":{"colorId":11,"name":null},"a.7lQsD6q80SFii3mh":{"colorId":15,"name":null}},"apool":{"numToAttrib":{"0":["author","a.mhm7nYHRCZouqkiu"],"1":["author","a.7lQsD6q80SFii3mh"]},"nextNum":2},"rev":640,"globalPadId":"iOS"},"colorPalette":["#ffc7c7","#fff1c7","#e3ffc7","#c7ffd5","#c7ffff","#c7d5ff","#e3c7ff","#ffc7f1","#ff8f8f","#ffe38f","#c7ff8f","#8fffab","#8fffff","#8fabff","#c78fff","#ff8fe3","#d97979","#d9c179","#a9d979","#79d991","#79d9d9","#7991d9","#a979d9","#d979c1","#d9a9a9","#d9cda9","#c1d9a9","#a9d9b5","#a9d9d9","#a9b5d9","#c1a9d9","#d9a9cd","#4c9c82","#12d1ad","#2d8e80","#7485c3","#a091c7","#3185ab","#6818b4","#e6e76d","#a42c64","#f386e5","#4ecc0c","#c0c236","#693224","#b5de6a","#9b88fd","#358f9b","#496d2f","#e267fe","#d23056","#1a1a64","#5aa335","#d722bb","#86dc6c","#b5a714","#955b6a","#9f2985","#4b81c8","#3d6a5b","#434e16","#d16084","#af6a0e","#8c8bd8"],"clientIp":"127.0.0.1","userIsGuest":true,"userColor":15,"padId":"iOS","initialTitle":"Pad: iOS","opts":{},"chatHistory":[],"numConnectedUsers":1,"isProPad":false,"readOnlyId":"r.Npr69WS360ZpKKfl","serverTimestamp":1318367801184,"globalPadId":"iOS","userId":"a.7lQsD6q80SFii3mh","cookiePrefsToSet":{"fullWidth":false,"hideSidebar":false},"abiwordAvailable":"no","hooks":{}};
+    clientVars = {"accountPrivs":{"maxRevisions":100},"initialRevisionList":[],"initialOptions":{"guestPolicy":"deny"},"collab_client_vars":{"initialAttributedText":{"text":"kkklkj\n\nasdffasdfd\nhallo daar\n\n\n\n\n\n\nlkjlkj\nj\nj\ndkjalskfj\nhoihoihoihoihh\n\nasdf\n\n","attribs":"*0|1+7*1|2+c*1*2+a|1+1*0|2+2*1|7+f*1+9*0|3+h*0+4|2+2"},"clientIp":"127.0.0.1","padId":"iOS","historicalAuthorData":{"a.TSn50SID3MqUJEo5":{"colorId":13,"name":null},"a.DPbxqXqPWjwplep2":{"colorId":17,"name":null}},"apool":{"numToAttrib":{"0":["author","a.TSn50SID3MqUJEo5"],"1":["author","a.DPbxqXqPWjwplep2"],"2":["bold","true"]},"nextNum":3},"rev":453,"globalPadId":"iOS"},"colorPalette":["#ffc7c7","#fff1c7","#e3ffc7","#c7ffd5","#c7ffff","#c7d5ff","#e3c7ff","#ffc7f1","#ff8f8f","#ffe38f","#c7ff8f","#8fffab","#8fffff","#8fabff","#c78fff","#ff8fe3","#d97979","#d9c179","#a9d979","#79d991","#79d9d9","#7991d9","#a979d9","#d979c1","#d9a9a9","#d9cda9","#c1d9a9","#a9d9b5","#a9d9d9","#a9b5d9","#c1a9d9","#d9a9cd","#4c9c82","#12d1ad","#2d8e80","#7485c3","#a091c7","#3185ab","#6818b4","#e6e76d","#a42c64","#f386e5","#4ecc0c","#c0c236","#693224","#b5de6a","#9b88fd","#358f9b","#496d2f","#e267fe","#d23056","#1a1a64","#5aa335","#d722bb","#86dc6c","#b5a714","#955b6a","#9f2985","#4b81c8","#3d6a5b","#434e16","#d16084","#af6a0e","#8c8bd8"],"clientIp":"127.0.0.1","userIsGuest":true,"userColor":17,"padId":"iOS","initialTitle":"Pad: iOS","opts":{},"chatHistory":[],"numConnectedUsers":8,"isProPad":false,"readOnlyId":"r.6NZNwr02F17XHwe0","serverTimestamp":1319190306831,"globalPadId":"iOS","userId":"a.DPbxqXqPWjwplep2","cookiePrefsToSet":{"fullWidth":false,"hideSidebar":false},"abiwordAvailable":"no","hooks":{}};
     clientVars.userAgent = "Anonymous";
     clientVars.collab_client_vars.clientAgent = "Anonymous";
 
@@ -165,56 +171,59 @@ function fakeHandshake()
             "value": globalUserName
         }); // Updates the current users UI
     }    
+
+    socket.once('connect', function () {
+        handshake();
+    });
 }
 
 function handshake() {
-    var loc = document.location;
-    //get the correct port
-    var port = loc.port == "" ? (loc.protocol == "https:" ? 443 : 80) : loc.port;
-    //create the url
-    var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
-    //find out in which subfolder we are
-    var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
-    //connect
-    socket = io.connect("http://192.168.1.129:9001/", {
-        resource: resource,
-        port: "9001"
-    });
+    // var loc = document.location;
+    // //get the correct port
+    // var port = loc.port == "" ? (loc.protocol == "https:" ? 443 : 80) : loc.port;
+    // //create the url
+    // var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
+    // //find out in which subfolder we are
+    // var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
+    // //connect
+    // socket = io.connect(url, {
+    //     resource: resource,
+    //     port: "9001"
+    // });
 
-    console.log(socket);
+    // console.log(socket);
 
-    socket.once('connect', function () {
-        console.log("connect");
+    console.log("connect");
 
-        var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
-        padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
-        padId = "iOS";
+    var padId = document.location.pathname.substring(document.location.pathname.lastIndexOf("/") + 1);
+    padId = unescape(padId); // unescape neccesary due to Safari and Opera interpretation of spaces
+    padId = "iOS";
 
-        document.title = document.title + " | " + padId;
+    document.title = document.title + " | " + padId;
 
-        var token = readCookie("token");
-        if (token == null) {
-            token = randomString();
-            createCookie("token", token, 60);
+    var token = readCookie("token");
+    if (token == null) {
+        token = randomString();
+        createCookie("token", token, 60);
+    }
+
+    var sessionID = readCookie("sessionID");
+    var password = readCookie("password");
+
+    var msg = {
+        "component": "pad",
+        "type": "CLIENT_READY",
+        "padId": padId,
+        "sessionID": sessionID,
+        "password": password,
+        "token": token,
+        "protocolVersion": 2,
+        data: {
+              lastRev:453
         }
+    };
 
-        var sessionID = readCookie("sessionID");
-        var password = readCookie("password");
-
-        var msg = {
-            "component": "pad",
-            "type": "CLIENT_READY",
-            "padId": padId,
-            "sessionID": sessionID,
-            "password": password,
-            "token": token,
-            "protocolVersion": 2
-        };
-        socket.json.send(msg);
-    });
-
-    var receivedClientVars = false;
-    var initalized = false;
+    socket.json.send(msg);
 
     socket.on('message', function (obj) {
 	    console.log("message received ");
@@ -233,7 +242,12 @@ function handshake() {
         //if we haven't recieved the clientVars yet, then this message should it be
         else if (!receivedClientVars) {
             //log the message
-            // if (window.console) console.log(obj);
+            receivedClientVars = true;
+            initalized = true;
+
+            return;
+
+            if (window.console) console.log(obj);
             receivedClientVars = true;
 
             //set some client vars

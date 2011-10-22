@@ -184,7 +184,8 @@ function makeChangesetTracker(scheduler, apool, aceCallbacksProvider)
       if (!submittedChangeset)
       {
         // violation of protocol; use prepareUserChangeset first
-        throw new Error("applySubmittedChangesToBase: no submitted changes to apply");
+        console.log("applySubmittedChangesToBase: no submitted changes to apply");
+        //throw new Error("applySubmittedChangesToBase: no submitted changes to apply");
       }
       //bumpDebug("applying committed changeset: "+submittedChangeset.encodeToString(false));
       baseAText = Changeset.applyToAText(submittedChangeset, baseAText, apool);

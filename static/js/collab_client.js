@@ -157,9 +157,17 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 //      else
 //      {
         // run again in a few seconds, to detect a disconnect
-        setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 3000);
 //      }
       console.log(state);
+
+      console.log(socket);
+
+      if(!socket || !socket.socket.connected) handleSocketClosed(true);
+
+      if(state != "AGAIN") setTimeout(wrapRecordingErrors("setTimeout(handleUserChanges)", handleUserChanges), 3000);
+
+      state = "AGAIN";
+
       return;
     }
 
@@ -564,17 +572,17 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
       	
       	// bug 2 reconnects (you get connected 2 times, pad fails!
       
-        setChannelState("RECONNECTING", reason);
-       	console.log("reconnecting");
-       	
-       	var loc = document.location;
-       	//get the correct port
-       	var port = loc.port == "" ? (loc.protocol == "https:" ? 443 : 80) : loc.port;
-       	//create the url
-       	var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
-       	//find out in which subfolder we are
-       	var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
-	
+      setChannelState("RECONNECTING", reason);
+     	console.log("reconnecting");
+     	
+     	var loc = document.location;
+     	//get the correct port
+     	var port = loc.port == "" ? (loc.protocol == "https:" ? 443 : 80) : loc.port;
+     	//create the url
+     	var url = loc.protocol + "//" + loc.hostname + ":" + port + "/";
+     	//find out in which subfolder we are
+     	var resource = loc.pathname.substr(1, loc.pathname.indexOf("/p/")) + "socket.io";
+
 	    console.log(socket);
 	
 	    socket.once('connect', function () {
@@ -612,8 +620,8 @@ function getCollabClient(ace2editor, serverVars, initialUserInfo, options)
 	        socket.json.send(msg);
 	        console.log(msg);
 	      	setChannelState("CONNECTED");
-		    state = "IDLE"
-	    });
+		      state = "IDLE";
+	      });
       }
 	
     }

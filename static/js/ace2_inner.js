@@ -4160,6 +4160,7 @@ function OUTER(gscope) {
     }
 
     function setup() {
+        if(root) return; // quick bug fix, setup is called twice?
         doc = document; // defined as a var in scope outside
         inCallStack("setup", function () {
             var body = doc.getElementById("innerdocbody");
